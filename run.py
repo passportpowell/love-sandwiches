@@ -50,11 +50,19 @@ def validate_data(values):
 
     return True
 
+
 def update_sales_worksheet(data): #This will add a new row in worksheeet with the data
     print('updating Sales Worksheet...\n')
     sales_worksheet = SHEET.worksheet("sales")
     sales_worksheet.append_row(data)
     print('Sales worksheet updated Successfully.\n')
+
+
+def update_surplus_worksheet(data): #This will add a new row in worksheeet with the data
+    print('updating Surplus Worksheet...\n')
+    surplus_worksheet = SHEET.worksheet("surplus")
+    surplus_worksheet.append_row(data)
+    print('surplus worksheet updated Successfully.\n')
 
 def calculate_surplus_data(sales_row):
     print('calculating surplus data...\n')
@@ -70,11 +78,17 @@ def calculate_surplus_data(sales_row):
     print(surplus_data)
     return surplus_data
 
+
+
+
+
 def main():
     data = get_sales_data()
     sales_data = [int(num) for num in data]
     update_sales_worksheet(sales_data)
     new_surplus_data = calculate_surplus_data(sales_data)
+    update_surplus_worksheet(new_surplus_data)
+
     print(new_surplus_data)
 
 print('Welcome to Love Sandwhiches Data Automation')
