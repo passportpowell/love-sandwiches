@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from pprint import pprint
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -17,14 +18,23 @@ def get_sales_data():
     """
     Get sales figures input from the user.
     """
-    print("Please enter sales data from the last market.")
-    print("Data should be six numbers, separated by commas.")
-    print("Example: 10,20,30,40,50,60\n")
 
-    data_str = input("Enter your data here: ")
+    while True:
+        print("Please enter sales data from the last market.")
+        print("Data should be six numbers, separated by commas.")
+        print("Example: 10,20,30,40,50,60\n")
 
-    sales_data = data_str.split(",") #cant update spreadsheet values without converting into a list
-    validate_data(sales_data)
+        data_str = input("Enter your data here: ")
+
+        sales_data = data_str.split(",") #cant update spreadsheet values without converting into a list
+        
+
+        if validate_data(sales_data):
+            print("Data Is Valid")
+            break
+
+    return sales_data
+
 
 def validate_data(values):
     try:
@@ -35,6 +45,30 @@ def validate_data(values):
             )
     except ValueError as e:
         print(f"Invalid data: {e}, please try again...\n")
+        return False
     print(values)
 
-get_sales_data()
+    return True
+
+def update_sales_worksheet(data): #This will add a new row in worksheeet with the data
+    print('updating Sales Worksheet...\n')
+    sales_worksheet = SHEET.worksheet("sales")
+    sales_worksheet.append_row(data)
+    print('Sales worksheet updated Successfully.\n')
+
+def calculate_surplus_data(sales_row):
+    print('calculating surplus data...\n')
+    stock = SHEET.worksheet("stock").get_all_values()
+    stock_row = stock[-1]
+    print(stock_row)
+
+
+def main():
+    data = get_sales_data()
+    sales_data = [int(num) for num in data]
+    update_sales_worksheet(sales_data)
+    calculate_surplus_data(sales_data)
+
+
+print('Welcome to Love Sandwhiches Data Automation')
+main()
