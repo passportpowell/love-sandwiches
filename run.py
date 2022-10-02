@@ -51,7 +51,7 @@ def validate_data(values):
     return True
 
 
-#These line of code are made simplier using caluate_surplus_data code just below
+#used REFACTOR on code underneath using caluate_surplus_data code just below
 # # (def update_sales_worksheet(data): #This will add a new row in worksheeet with the data
 #     print('updating Sales Worksheet...\n')
 #     sales_worksheet = SHEET.worksheet("sales")
@@ -86,8 +86,15 @@ def calculate_surplus_data(sales_row):
     print(surplus_data)
     return surplus_data
 
-
-
+def get_last_5_enteries_sales():
+    sales = SHEET.worksheet("sales")
+    # column = sales.col_values(3)
+    # print(column)
+    columns = []
+    for ind in range(1,7):
+        column = sales.col_values(ind)
+        columns.append(column[-5:])
+    return columns
 
 
 def main():
@@ -98,4 +105,6 @@ def main():
     update_worksheet(new_surplus_data, "surplus")
 
 print('Welcome to Love Sandwhiches Data Automation')
-main()
+# main()
+
+sales_columns = get_last_5_enteries_sales()
